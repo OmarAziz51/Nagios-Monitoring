@@ -1,0 +1,21 @@
+# Example NRPE command definitions for Ubuntu Linux VMs.
+# Merge these into /etc/nagios/nrpe.cfg or a file included by it.
+# Do not overwrite the complete nrpe.cfg file.
+#
+# Restrict allowed_hosts to localhost and the Nagios server:
+# allowed_hosts=127.0.0.1,10.10.10.90
+#
+# Verify plugin paths on your distribution before enabling commands.
+
+command[check_load]=/usr/lib/nagios/plugins/check_load -w 5,4,3 -c 10,6,4
+command[check_disk]=/usr/lib/nagios/plugins/check_disk -w 20% -c 10% -p /
+command[check_procs]=/usr/lib/nagios/plugins/check_procs -w 250 -c 400
+command[check_mem]=/usr/local/nagios/libexec/check_mem.sh 80 90
+
+# On each monitored VM:
+# sudo chmod 755 /usr/local/nagios/libexec/check_mem.sh
+# sudo systemctl restart nagios-nrpe-server
+# sudo systemctl status nagios-nrpe-server --no-pager
+#
+# Ensure the NRPE daemon can execute the custom memory script. If the script
+# is stored elsewhere, update the command path above.
